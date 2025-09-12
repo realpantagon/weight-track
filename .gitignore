@@ -1,0 +1,14 @@
+# Node
+node_modules/
+pnpm-lock.yaml
+
+# Build
+dist/
+.next/
+out/
+
+# Cloudflare
+.wrangler/
+
+# Env
+.env
