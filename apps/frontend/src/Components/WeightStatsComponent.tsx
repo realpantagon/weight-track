@@ -1,7 +1,10 @@
-import type { WeightStats } from "../types";
-
 interface WeightStatsProps {
-  stats: WeightStats | null;
+  stats: {
+    totalChange: number;
+    minWeight: number;
+    maxWeight: number;
+    avgWeight: number;
+  } | null;
 }
 
 export default function WeightStatsComponent({ stats }: WeightStatsProps) {

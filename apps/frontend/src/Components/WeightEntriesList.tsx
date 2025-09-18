@@ -6,7 +6,7 @@ interface WeightEntriesListProps {
   formatDate: (dateStr: string) => string;
 }
 
-const ENTRIES_PER_PAGE = 10;
+const ENTRIES_PER_PAGE = 5;
 
 export default function WeightEntriesList({ weights, formatDate }: WeightEntriesListProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -99,13 +99,13 @@ export default function WeightEntriesList({ weights, formatDate }: WeightEntries
           const isLatest = globalIndex === 0; // First item in reversed array is latest
           const previousWeight =
             globalIndex < reversedWeights.length - 1
-              ? reversedWeights[globalIndex + 1].Weight
+              ? reversedWeights[globalIndex + 1].weight_kg
               : null;
 
-          const weightDiff = previousWeight !== null ? w.Weight - previousWeight : 0;
+          const weightDiff = previousWeight !== null ? w.weight_kg - previousWeight : 0;
           const weightColor =
             isLatest && previousWeight !== null
-              ? w.Weight > previousWeight
+              ? w.weight_kg > previousWeight
                 ? "text-red-400"
                 : "text-green-400"
               : "text-white";
@@ -128,8 +128,8 @@ export default function WeightEntriesList({ weights, formatDate }: WeightEntries
               <div className="flex justify-between items-start">
                 <div>
                   <p className={`text-xl font-bold flex items-center gap-2 ${isLatest ? weightColor : "text-white"}`}>
-                    {w.Weight} kg
-                    {w.Exercise === true && (
+                    {w.weight_kg} kg
+                    {w.exercised === true && (
                       <span title="Exercised" className="inline-block align-middle text-emerald-400 text-lg ml-1">🏃‍♂️</span>
                     )}
                   </p>
@@ -138,17 +138,17 @@ export default function WeightEntriesList({ weights, formatDate }: WeightEntries
                       {weightDiff > 0 ? '+' : ''}{weightDiff.toFixed(1)}kg from previous
                     </p>
                   )}
-                  <p className="text-sm text-gray-400 mt-1">{formatDate(w.Date)}</p>
-                  {w.Details && (
+                  <p className="text-sm text-gray-400 mt-1">{formatDate(w.recorded_at)}</p>
+                  {w.details && (
                     <p className="text-sm mt-2 text-gray-300 bg-gray-700/50 px-2 py-1 rounded">
-                      {w.Details}
+                      {w.details}
                     </p>
                   )}
                 </div>
                 
                 {isLatest && previousWeight !== null && (
                   <div className={`text-2xl ${weightColor}`}>
-                    {w.Weight > previousWeight ? '↗️' : '↘️'}
+                    {w.weight_kg > previousWeight ? '↗️' : '↘️'}
                   </div>
                 )}
               </div>

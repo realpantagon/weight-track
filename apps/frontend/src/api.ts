@@ -1,330 +1,57 @@
-import type { WeightEntry, NewWeightEntry } from './types';
+import type { WeightEntry, NewWeightEntry } from "./types";
 
-// Mock data for development
-const mockWeightEntries: WeightEntry[] = [
-  {
-    id: '1',
-    Date: '2025-08-15T08:00:00Z',
-    Weight: 87.5,
-    Details: 'Starting my weight tracking journey',
-    Exercise: false
-  },
-  {
-    id: '2',
-    Date: '2025-08-18T08:15:00Z',
-    Weight: 87.2,
-    Details: 'First workout of the week',
-    Exercise: true
-  },
-  {
-    id: '3',
-    Date: '2025-08-20T08:30:00Z',
-    Weight: 86.8,
-    Details: 'Making good progress',
-    Exercise: true
-  },
-  {
-    id: '4',
-    Date: '2025-08-22T08:00:00Z',
-    Weight: 86.9,
-    Details: 'Small fluctuation',
-    Exercise: false
-  },
-  {
-    id: '5',
-    Date: '2025-08-25T08:20:00Z',
-    Weight: 86.4,
-    Details: 'Consistent workouts paying off',
-    Exercise: true
-  },
-  {
-    id: '6',
-    Date: '2025-08-27T08:10:00Z',
-    Weight: 86.1,
-    Details: 'Feeling stronger',
-    Exercise: true
-  },
-  {
-    id: '7',
-    Date: '2025-08-29T08:25:00Z',
-    Weight: 85.8,
-    Details: 'Great week of training',
-    Exercise: true
-  },
-  {
-    id: '8',
-    Date: '2025-09-01T08:00:00Z',
-    Weight: 85.6,
-    Details: 'New month, new goals',
-    Exercise: true
-  },
-  {
-    id: '9',
-    Date: '2025-09-03T08:15:00Z',
-    Weight: 85.2,
-    Details: 'Feeling good today',
-    Exercise: false
-  },
-  {
-    id: '10',
-    Date: '2025-09-05T08:30:00Z',
-    Weight: 84.9,
-    Details: 'After a good night sleep',
-    Exercise: true
-  },
-  {
-    id: '11',
-    Date: '2025-09-07T08:00:00Z',
-    Weight: 85.1,
-    Details: 'Weekend indulgence',
-    Exercise: false
-  },
-  {
-    id: '12',
-    Date: '2025-09-10T08:20:00Z',
-    Weight: 84.7,
-    Details: 'Back on track',
-    Exercise: true
-  },
-  {
-    id: '13',
-    Date: '2025-09-12T08:10:00Z',
-    Weight: 84.4,
-    Details: 'New low!',
-    Exercise: true
-  },
-  {
-    id: '14',
-    Date: '2025-09-15T08:25:00Z',
-    Weight: 84.1,
-    Details: 'Consistent progress',
-    Exercise: true
-  },
-  {
-    id: '15',
-    Date: '2025-09-17T08:15:00Z',
-    Weight: 83.8,
-    Details: 'Feeling amazing!',
-    Exercise: true
-  },{
-    id: '9',
-    Date: '2025-09-03T08:15:00Z',
-    Weight: 85.2,
-    Details: 'Feeling good today',
-    Exercise: false
-  },
-  {
-    id: '10',
-    Date: '2025-09-05T08:30:00Z',
-    Weight: 84.9,
-    Details: 'After a good night sleep',
-    Exercise: true
-  },
-  {
-    id: '11',
-    Date: '2025-09-07T08:00:00Z',
-    Weight: 85.1,
-    Details: 'Weekend indulgence',
-    Exercise: false
-  },
-  {
-    id: '12',
-    Date: '2025-09-10T08:20:00Z',
-    Weight: 84.7,
-    Details: 'Back on track',
-    Exercise: true
-  },
-  {
-    id: '13',
-    Date: '2025-09-12T08:10:00Z',
-    Weight: 84.4,
-    Details: 'New low!',
-    Exercise: true
-  },
-  {
-    id: '14',
-    Date: '2025-09-15T08:25:00Z',
-    Weight: 84.1,
-    Details: 'Consistent progress',
-    Exercise: true
-  },
-  {
-    id: '15',
-    Date: '2025-09-17T08:15:00Z',
-    Weight: 83.8,
-    Details: 'Feeling amazing!',
-    Exercise: true
-  },{
-    id: '9',
-    Date: '2025-09-03T08:15:00Z',
-    Weight: 85.2,
-    Details: 'Feeling good today',
-    Exercise: false
-  },
-  {
-    id: '10',
-    Date: '2025-09-05T08:30:00Z',
-    Weight: 84.9,
-    Details: 'After a good night sleep',
-    Exercise: true
-  },
-  {
-    id: '11',
-    Date: '2025-09-07T08:00:00Z',
-    Weight: 85.1,
-    Details: 'Weekend indulgence',
-    Exercise: false
-  },
-  {
-    id: '12',
-    Date: '2025-09-10T08:20:00Z',
-    Weight: 84.7,
-    Details: 'Back on track',
-    Exercise: true
-  },
-  {
-    id: '13',
-    Date: '2025-09-12T08:10:00Z',
-    Weight: 84.4,
-    Details: 'New low!',
-    Exercise: true
-  },
-  {
-    id: '14',
-    Date: '2025-09-15T08:25:00Z',
-    Weight: 84.1,
-    Details: 'Consistent progress',
-    Exercise: true
-  },
-  {
-    id: '15',
-    Date: '2025-09-17T08:15:00Z',
-    Weight: 83.8,
-    Details: 'Feeling amazing!',
-    Exercise: true
-  },{
-    id: '9',
-    Date: '2025-09-03T08:15:00Z',
-    Weight: 85.2,
-    Details: 'Feeling good today',
-    Exercise: false
-  },
-  {
-    id: '10',
-    Date: '2025-09-05T08:30:00Z',
-    Weight: 84.9,
-    Details: 'After a good night sleep',
-    Exercise: true
-  },
-  {
-    id: '11',
-    Date: '2025-09-07T08:00:00Z',
-    Weight: 85.1,
-    Details: 'Weekend indulgence',
-    Exercise: false
-  },
-  {
-    id: '12',
-    Date: '2025-09-10T08:20:00Z',
-    Weight: 84.7,
-    Details: 'Back on track',
-    Exercise: true
-  },
-  {
-    id: '13',
-    Date: '2025-09-12T08:10:00Z',
-    Weight: 84.4,
-    Details: 'New low!',
-    Exercise: true
-  },
-  {
-    id: '14',
-    Date: '2025-09-15T08:25:00Z',
-    Weight: 84.1,
-    Details: 'Consistent progress',
-    Exercise: true
-  },
-  {
-    id: '15',
-    Date: '2025-09-17T08:15:00Z',
-    Weight: 83.8,
-    Details: 'Feeling amazing!',
-    Exercise: true
-  },
-];
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
-// Simulate API delay
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+export async function fetchWeights(): Promise<WeightEntry[]> {
+  const res = await fetch(`${API_BASE}/weight`);
+  console.log("fetchWeights response:", res.status, res.statusText);
 
-// Generate unique ID for new entries
-const generateId = (): string => {
-  return Date.now().toString() + Math.random().toString(36).substr(2, 9);
-};
+  if (!res.ok) throw new Error("Failed to fetch weights");
+  const data = await res.json();
+  console.log("fetchWeights data:", data);
+  return data;
+}
 
-/**
- * Fetches all weight entries (mock implementation)
- */
-export const fetchWeights = async (): Promise<WeightEntry[]> => {
-  await delay(300); // Simulate network delay
-  
-  // Return a copy of the mock data sorted by date
-  return [...mockWeightEntries].sort((a, b) => 
-    new Date(a.Date).getTime() - new Date(b.Date).getTime()
-  );
-};
 
-/**
- * Adds a new weight entry (mock implementation)
- */
-export const addWeightEntry = async (entry: NewWeightEntry): Promise<WeightEntry> => {
-  await delay(500); // Simulate network delay
-  
-  const newEntry: WeightEntry = {
-    id: generateId(),
-    Date: entry.date,
-    Weight: entry.weight,
-    Details: entry.note || undefined,
-    Exercise: entry.exercise || false
-  };
-  
-  // In a real app, this would be persisted to a backend
-  mockWeightEntries.push(newEntry);
-  
-  return newEntry;
-};
+export async function fetchMinWeight(): Promise<number> {
+  const res = await fetch(`${API_BASE}/weight/min`);
+  console.log("response" + res);
 
-/**
- * Deletes a weight entry (mock implementation)
- */
-export const deleteWeightEntry = async (id: string): Promise<void> => {
-  await delay(200); // Simulate network delay
-  
-  const index = mockWeightEntries.findIndex(entry => entry.id === id);
-  if (index > -1) {
-    mockWeightEntries.splice(index, 1);
-  }
-};
+  if (!res.ok) throw new Error("Failed to fetch min weight");
+  const data = await res.json();
+  return data.min;
+}
 
-/**
- * Updates a weight entry (mock implementation)
- */
-export const updateWeightEntry = async (id: string, updates: Partial<NewWeightEntry>): Promise<WeightEntry> => {
-  await delay(400); // Simulate network delay
-  
-  const entryIndex = mockWeightEntries.findIndex(entry => entry.id === id);
-  if (entryIndex === -1) {
-    throw new Error('Weight entry not found');
-  }
-  
-  const existingEntry = mockWeightEntries[entryIndex];
-  const updatedEntry: WeightEntry = {
-    ...existingEntry,
-    ...(updates.date && { Date: updates.date }),
-    ...(updates.weight && { Weight: updates.weight }),
-    ...(updates.note !== undefined && { Details: updates.note || undefined }),
-    ...(updates.exercise !== undefined && { Exercise: updates.exercise })
-  };
-  
-  mockWeightEntries[entryIndex] = updatedEntry;
-  return updatedEntry;
-};
+
+export async function fetchMaxWeight(): Promise<number> {
+  const res = await fetch(`${API_BASE}/weight/max`);
+  console.log("response" + res);
+
+  if (!res.ok) throw new Error("Failed to fetch max weight");
+  const data = await res.json();
+  return data.max;
+}
+
+export async function fetchAvgWeight(): Promise<number> {
+  const res = await fetch(`${API_BASE}/weight/avg`);
+  console.log("response" + res);
+
+  if (!res.ok) throw new Error("Failed to fetch avg weight");
+  const data = await res.json();
+  return data.average;
+}
+
+export async function addWeightEntry(entry: NewWeightEntry): Promise<WeightEntry> {
+  const res = await fetch(`${API_BASE}/weight`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(entry),
+  });
+
+  if (!res.ok) throw new Error("Failed to add weight entry");
+  return res.json();
+}
+
+

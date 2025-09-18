@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   LineChart,
   Line,
@@ -7,142 +8,243 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import type { ChartDataPoint } from "../types";
+import type { WeightEntry } from "../types";
 
 interface WeightChartProps {
-  weights: Array<{
-    Date: string;
-    Weight: number;
-  }>;
+  weights: WeightEntry[];
 }
 
-// Sample data intelligently for large datasets
-const sampleDataForChart = (data: ChartDataPoint[], maxPoints: number = 30): ChartDataPoint[] => {
-  if (data.length <= maxPoints) return data;
-  
-  const sampledData: ChartDataPoint[] = [];
-  const step = Math.floor(data.length / (maxPoints - 2)); // -2 to ensure we include first and last
-  
-  // Always include first point
-  sampledData.push(data[0]);
-  
-  // Sample middle points
-  for (let i = step; i < data.length - 1; i += step) {
-    sampledData.push(data[i]);
-  }
-  
-  // Always include last point
-  if (data.length > 1) {
-    sampledData.push(data[data.length - 1]);
-  }
-  
-  return sampledData;
-};
+interface ChartDataPoint {
+  date: string;
+  fullDate: string;
+  weight: number;
+  timestamp: number;
+}
+
+type FilterPeriod = "all" | "3m" | "1m" | "1w";
 
 export default function WeightChart({ weights }: WeightChartProps) {
-  const chartData: ChartDataPoint[] = weights.map((w) => ({
-    date: new Date(w.Date).toLocaleDateString("en-GB", {
+  const [selectedPeriod, setSelectedPeriod] = useState<FilterPeriod>("all");
+
+  // Sort weights chronologically (oldest to newest)
+  const sortedWeights = [...weights].sort(
+    (a, b) =>
+      new Date(a.recorded_at).getTime() - new Date(b.recorded_at).getTime()
+  );
+
+  // Filter weights based on selected period
+  const getFilteredWeights = () => {
+    if (selectedPeriod === "all") return sortedWeights;
+
+    const now = new Date();
+    const cutoffDate = new Date();
+
+    switch (selectedPeriod) {
+      case "3m":
+        cutoffDate.setMonth(now.getMonth() - 3);
+        break;
+      case "1m":
+        cutoffDate.setMonth(now.getMonth() - 1);
+        break;
+      case "1w":
+        cutoffDate.setDate(now.getDate() - 7);
+        break;
+    }
+
+    return sortedWeights.filter((w) => new Date(w.recorded_at) >= cutoffDate);
+  };
+
+  const filteredWeights = getFilteredWeights();
+
+  // Convert to chart data
+  const chartData: ChartDataPoint[] = filteredWeights.map((w) => ({
+    date: new Date(w.recorded_at).toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
     }),
-    fullDate: new Date(w.Date).toLocaleDateString("en-GB", {
+    fullDate: new Date(w.recorded_at).toLocaleDateString("en-GB", {
       day: "numeric",
       month: "short",
       year: "numeric",
     }),
-    weight: w.Weight,
+    weight: w.weight_kg,
+    timestamp: new Date(w.recorded_at).getTime(),
   }));
 
-  // Use sampled data for the chart to avoid overcrowding
-  const displayChartData = sampleDataForChart(chartData);
-  
-  // Calculate intelligent spacing for chart elements
-  const shouldShowLabels = displayChartData.length <= 10; // Only show labels if 10 or fewer points
-  const tickInterval = Math.max(0, Math.floor(displayChartData.length / 6)); // Show max 6 x-axis labels
+  // Calculate statistics for filtered data
+  const getStats = () => {
+    if (filteredWeights.length < 2) return null;
 
-  if (weights.length === 0) {
+    const latest = filteredWeights[filteredWeights.length - 1].weight_kg;
+    const previous = filteredWeights[filteredWeights.length - 2].weight_kg;
+    const first = filteredWeights[0].weight_kg;
+    const diff = latest - previous;
+    const totalChange = latest - first;
+
+    return { latest, previous, diff, totalChange };
+  };
+
+  const stats = getStats();
+
+  // Filter buttons configuration
+  const filterButtons: { period: FilterPeriod; label: string }[] = [
+    { period: "all", label: "All" },
+    { period: "3m", label: "3M" },
+    { period: "1m", label: "1M" },
+    { period: "1w", label: "1W" },
+  ];
+
+  // Calculate chart settings based on data density
+  const getChartSettings = () => {
+    const dataLength = chartData.length;
+    return {
+      dotRadius:
+        dataLength > 100 ? 1 : dataLength > 50 ? 1.5 : dataLength > 20 ? 2 : 3,
+      showLabels: dataLength <= 15,
+      tickInterval: Math.max(0, Math.floor(dataLength / 6)),
+    };
+  };
+
+  const chartSettings = getChartSettings();
+
+  if (sortedWeights.length === 0) {
     return (
-      <div className="text-center py-8">
-        <p className="text-gray-400">No data to display</p>
+      <div className="mb-8 bg-gray-800/50 rounded-2xl p-6 border border-gray-700/50 backdrop-blur-sm">
+        <div className="text-center py-8">
+          <p className="text-gray-400">No weight data available</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="mb-8 bg-gray-800/50 rounded-2xl p-4 border border-gray-700/50 backdrop-blur-sm">
+      {/* Header with Title and Filters */}
       <div className="mb-4">
-        <h2 className="text-lg font-semibold text-emerald-400 mb-1">Weight Progress</h2>
-        <div className="text-sm text-gray-400">
-          {weights.length > 1 && (
-            <>
-              {(() => {
-                const latest = weights[weights.length - 1].Weight;
-                const previous = weights[weights.length - 2].Weight;
-                const diff = latest - previous;
-                const isIncrease = diff > 0;
-                return (
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span>Latest: <span className="text-white font-medium">{latest}kg</span></span>
-                      <span>Previous: <span className="text-white font-medium">{previous}kg</span></span>
-                    </div>
-                    <span className={`inline-flex items-center gap-1 ${isIncrease ? 'text-red-400' : 'text-green-400'}`}>
-                      {isIncrease ? '↗' : '↘'} {Math.abs(diff).toFixed(1)}kg from last entry
-                    </span>
-                    {displayChartData.length < chartData.length && (
-                      <div className="text-xs text-gray-500 mt-1">
-                        Chart showing {displayChartData.length} of {chartData.length} data points
-                      </div>
-                    )}
-                  </div>
-                );
-              })()}
-            </>
-          )}
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-semibold text-emerald-400">
+            Weight Progress
+          </h2>
+
+          {/* Time Period Filter Buttons */}
+          <div className="flex gap-1 bg-gray-700/50 rounded-lg p-1">
+            {filterButtons.map(({ period, label }) => (
+              <button
+                key={period}
+                onClick={() => setSelectedPeriod(period)}
+                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 ${
+                  selectedPeriod === period
+                    ? "bg-emerald-500 text-white shadow-md"
+                    : "text-gray-300 hover:text-white hover:bg-gray-600/50"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
+
+        {/* Statistics */}
+        {stats && (
+          <div className="text-sm text-gray-400 space-y-1">
+            <div className="flex items-center justify-between">
+              <span>
+                Latest:{" "}
+                <span className="text-white font-medium">{stats.latest}kg</span>
+              </span>
+              <span>
+                Previous:{" "}
+                <span className="text-white font-medium">
+                  {stats.previous}kg
+                </span>
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span
+                className={`inline-flex items-center gap-1 ${
+                  stats.diff >= 0 ? "text-red-400" : "text-green-400"
+                }`}
+              >
+                {stats.diff >= 0 ? "↗" : "↘"} {Math.abs(stats.diff).toFixed(1)}
+                kg from previous
+              </span>
+              <span
+                className={`text-xs ${
+                  stats.totalChange >= 0 ? "text-red-400" : "text-green-400"
+                }`}
+              >
+                Total: {stats.totalChange >= 0 ? "+" : ""}
+                {stats.totalChange.toFixed(1)}kg
+              </span>
+            </div>
+            <div className="text-xs text-gray-500">
+              Showing {filteredWeights.length} of {sortedWeights.length} records
+            </div>
+          </div>
+        )}
       </div>
-      
-      <ResponsiveContainer width="100%" height={280}>
+
+      {/* Chart */}
+      <ResponsiveContainer width="100%" height={300}>
         <LineChart
-          data={displayChartData}
-          margin={{ top: 20, right: 15, bottom: 40, left: -10 }}
+          data={chartData}
+          margin={{ top: 20, right: 20, bottom: 5, left: 0 }}
         >
-          <CartesianGrid strokeDasharray="2 2" stroke="#374151" strokeOpacity={0.3} />
+          <CartesianGrid
+            strokeDasharray="2 2"
+            stroke="#374151"
+            strokeOpacity={0.2}
+            horizontal={true}
+            vertical={false}
+          />
           <XAxis
             dataKey="date"
             stroke="#9CA3AF"
-            interval={tickInterval}
-            padding={{ left: 15, right: 15 }}
-            tick={({ x, y, payload }: { x: number; y: number; payload: any }) => (
-              <text
-                x={x}
-                y={y + 35}
-                transform={`rotate(45, ${x}, ${y + 30})`}
-                textAnchor="start"
-                fontSize={9}
-                fill="#9CA3AF"
-              >
-                {payload.value}
-              </text>
-            )}
+            fontSize={10}
+            interval={chartSettings.tickInterval}
+            tick={{
+              fill: "#9CA3AF",
+              fontSize: 10,
+            }}
+            tickLine={false}
+            axisLine={false}
+            angle={-45}
+            textAnchor="end"
+            height={60}
           />
           <YAxis
-            fontSize={11}
-            domain={["dataMin - 0.5", "dataMax + 0.5"]}
+            fontSize={10}
             stroke="#9CA3AF"
             tickFormatter={(value: number) => `${value}kg`}
+            tick={{
+              fill: "#9CA3AF",
+              fontSize: 10,
+            }}
+            tickLine={false}
+            axisLine={false}
+            domain={["dataMin - 1", "dataMax + 1"]}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#1F2937',
-              border: '1px solid #374151',
-              borderRadius: '8px',
-              fontSize: '12px'
+              backgroundColor: "#1F2937",
+              border: "1px solid #374151",
+              borderRadius: "12px",
+              fontSize: "12px",
+              boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)",
             }}
-            labelStyle={{ color: '#D1D5DB' }}
-            formatter={(value: number) => [`${value}kg`, 'Weight']}
+            labelStyle={{
+              color: "#D1D5DB",
+              fontWeight: "500",
+              marginBottom: "4px",
+            }}
+            formatter={(value: number) => [
+              <span style={{ color: "#10b981", fontWeight: "600" }}>
+                {value}kg
+              </span>,
+              "Weight",
+            ]}
             labelFormatter={(label: string) => {
-              const dataPoint = displayChartData.find(d => d.date === label);
+              const dataPoint = chartData.find((d) => d.date === label);
               return dataPoint ? dataPoint.fullDate : label;
             }}
           />
@@ -150,26 +252,20 @@ export default function WeightChart({ weights }: WeightChartProps) {
             type="monotone"
             dataKey="weight"
             stroke="#10b981"
-            strokeWidth={2.5}
-            dot={{ 
-              r: displayChartData.length > 20 ? 2 : 4,
-              fill: "#10b981", 
-              strokeWidth: 2, 
-              stroke: "#064E3B" 
+            strokeWidth={2}
+            dot={{
+              r: chartSettings.dotRadius,
+              fill: "#10b981",
+              strokeWidth: 1,
+              stroke: "#065f46",
             }}
-            activeDot={{ r: 6, stroke: "#10b981", strokeWidth: 2, fill: "#ffffff" }}
-            label={shouldShowLabels ? ({ x, y, value }: any) => (
-              <text
-                x={x}
-                y={y - 12}
-                fill="#D1D5DB"
-                fontSize={10}
-                textAnchor="middle"
-                fontWeight="500"
-              >
-                {value}
-              </text>
-            ) : false}
+            activeDot={{
+              r: 5,
+              stroke: "#10b981",
+              strokeWidth: 2,
+              fill: "#ffffff",
+            }}
+            connectNulls={false}
           />
         </LineChart>
       </ResponsiveContainer>
