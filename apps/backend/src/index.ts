@@ -59,7 +59,7 @@ app.get("/api/weight/max", async (c) => {
 });
 
 //get AVERAGE weight entry
-app.get("/api/weight/average", async (c) => {
+app.get("/api/weight/avg", async (c) => {
   const supabase = getSupabase(c);
   const { data, error } = await supabase
     .from("Pantagon_Weight")
@@ -76,7 +76,7 @@ app.get("/api/weight/average", async (c) => {
   const avg =
     data.reduce((sum, row) => sum + Number(row.weight_kg), 0) / data.length;
 
-  return c.json({ average: avg });
+  return c.json({ average: Number(avg.toFixed(2)) });
 });
 
 //add a new weight entry
