@@ -250,55 +250,7 @@ const mockWeightEntries: WeightEntry[] = [
     Weight: 83.8,
     Details: 'Feeling amazing!',
     Exercise: true
-  },{
-    id: '9',
-    Date: '2025-09-03T08:15:00Z',
-    Weight: 85.2,
-    Details: 'Feeling good today',
-    Exercise: false
   },
-  {
-    id: '10',
-    Date: '2025-09-05T08:30:00Z',
-    Weight: 84.9,
-    Details: 'After a good night sleep',
-    Exercise: true
-  },
-  {
-    id: '11',
-    Date: '2025-09-07T08:00:00Z',
-    Weight: 85.1,
-    Details: 'Weekend indulgence',
-    Exercise: false
-  },
-  {
-    id: '12',
-    Date: '2025-09-10T08:20:00Z',
-    Weight: 84.7,
-    Details: 'Back on track',
-    Exercise: true
-  },
-  {
-    id: '13',
-    Date: '2025-09-12T08:10:00Z',
-    Weight: 84.4,
-    Details: 'New low!',
-    Exercise: true
-  },
-  {
-    id: '14',
-    Date: '2025-09-15T08:25:00Z',
-    Weight: 84.1,
-    Details: 'Consistent progress',
-    Exercise: true
-  },
-  {
-    id: '15',
-    Date: '2025-09-17T08:15:00Z',
-    Weight: 83.8,
-    Details: 'Feeling amazing!',
-    Exercise: true
-  }
 ];
 
 // Simulate API delay

@@ -1,12 +1,20 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Pantagon weight tracking backend (Cloudflare Worker + Hono)",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": [],
+  "keywords": [
+    "hono",
+    "cloudflare",
+    "workers",
+    "backend",
+    "weight-tracking"
+  ],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.15.1",
@@ -16,6 +24,6 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250912.0",
     "typescript": "~5.8.3",
-    "wrangler": "^4.35.0"
+    "wrangler": "^4.37.1"
   }
 }
