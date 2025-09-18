@@ -86,6 +86,18 @@ export default function WeightChart({ weights }: WeightChartProps) {
 
   const stats = getStats();
 
+  // Determine line color based on weight trend
+  const getLineColor = () => {
+    if (filteredWeights.length < 2) return "#10b981"; // Default green
+    
+    const latest = filteredWeights[filteredWeights.length - 1].weight_kg;
+    const previous = filteredWeights[filteredWeights.length - 2].weight_kg;
+    
+    return latest > previous ? "#ef4444" : "#10b981"; // Red if increased, green if decreased
+  };
+
+  const lineColor = getLineColor();
+
   // Filter buttons configuration
   const filterButtons: { period: FilterPeriod; label: string }[] = [
     { period: "all", label: "All" },
@@ -238,7 +250,7 @@ export default function WeightChart({ weights }: WeightChartProps) {
               marginBottom: "4px",
             }}
             formatter={(value: number) => [
-              <span style={{ color: "#10b981", fontWeight: "600" }}>
+              <span style={{ color: lineColor, fontWeight: "600" }}>
                 {value}kg
               </span>,
               "Weight",
@@ -251,17 +263,17 @@ export default function WeightChart({ weights }: WeightChartProps) {
           <Line
             type="monotone"
             dataKey="weight"
-            stroke="#10b981"
+            stroke={lineColor}
             strokeWidth={2}
             dot={{
               r: chartSettings.dotRadius,
-              fill: "#10b981",
+              fill: lineColor,
               strokeWidth: 1,
-              stroke: "#065f46",
+              stroke: lineColor === "#ef4444" ? "#dc2626" : "#065f46",
             }}
             activeDot={{
               r: 5,
-              stroke: "#10b981",
+              stroke: lineColor,
               strokeWidth: 2,
               fill: "#ffffff",
             }}
