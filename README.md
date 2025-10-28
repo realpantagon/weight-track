@@ -47,8 +47,14 @@ npx wrangler -v
 Add Cloudflare Worker secrets one command at a time from the project root:
 ```bash
 pnpm --filter backend wrangler secret put SUPABASE_URL
+#Copy from Supabase Project Setting -> Data API
+
 pnpm --filter backend wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+#Copy from Supabase Project Setting -> API Key service_role 
+
 pnpm --filter backend wrangler secret put SUPABASE_TABLE
+#Your Supabase table name weights_<yourname> from your created table
+
 ```
 After the secrets are set, deploy the backend:
 ```bash
@@ -83,16 +89,6 @@ pantagon-weight-tracking/
 └── README.md
 ```
 
-## 🔧 Available Scripts
-
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start both frontend and backend in development mode |
-| `pnpm dev:frontend` | Start only the frontend development server |
-| `pnpm dev:backend` | Start only the backend development server |
-| `pnpm build:frontend` | Build the frontend for production |
-| `pnpm build:backend` | Deploy the backend to Cloudflare Workers |
-
 ## 🎯 Usage
 
 1. **Add Weight Entry**: Click the "+" button to add a new weight entry
@@ -104,7 +100,6 @@ pantagon-weight-tracking/
 
 - [Supabase](https://supabase.com) for the database and backend services
 - [Cloudflare Workers](https://developers.cloudflare.com/workers/) for edge computing
-- [Recharts](https://recharts.org) for beautiful data visualization
 - [TailwindCSS](https://tailwindcss.com) for styling
 
 ---
