@@ -46,19 +46,21 @@ npx wrangler -v
 ## Backend Secrets and Deployment
 Add Cloudflare Worker secrets one command at a time from the project root:
 ```bash
-pnpm --filter backend wrangler secret put SUPABASE_URL
+cd apps/backend
+pnpm wrangler secret put SUPABASE_URL
 #Copy from Supabase Project Setting -> Data API
 
-pnpm --filter backend wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+pnpm wrangler secret put SUPABASE_SERVICE_ROLE_KEY
 #Copy from Supabase Project Setting -> API Key service_role 
 
-pnpm --filter backend wrangler secret put SUPABASE_TABLE
+pnpm wrangler secret put SUPABASE_TABLE
 #Your Supabase table name weights_<yourname> from your created table
 
 ```
 After the secrets are set, deploy the backend:
 ```bash
-pnpm --filter backend wrangler deploy
+cd apps/backend
+pnpm wrangler deploy
 ```
 
 ## Useful Scripts
