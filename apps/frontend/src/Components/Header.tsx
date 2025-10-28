@@ -8,7 +8,7 @@ export default function Header({ totalEntries, latestEntryDate, formatDate }: He
   return (
     <div className="text-center mb-8 pt-4">
       <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-emerald-400 to-emerald-600 bg-clip-text text-transparent">
-        Weight Tracking
+       Pantagon Weight Tracking
       </h1>
       {totalEntries > 0 && latestEntryDate && (
         <div className="text-sm text-gray-400">
