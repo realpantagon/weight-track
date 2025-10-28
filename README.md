@@ -7,32 +7,6 @@ A modern, full-stack weight tracking application built with React, TypeScript, a
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=flat&logo=cloudflare&logoColor=white)
 
-## ✨ Features
-
-- **📊 Beautiful Charts**: Visualize your weight progress with interactive charts
-- **📈 Statistics**: Track your minimum, maximum, and average weight
-- **📱 Responsive Design**: Works perfectly on desktop and mobile devices
-- **⚡ Fast Performance**: Built with modern technologies for optimal speed
-- **🔒 Secure**: Data stored securely with Supabase
-- **🚀 Easy Deployment**: Deploy to Cloudflare Workers with one command
-
-## 🛠️ Tech Stack
-
-### Frontend
-- **React 19** - Modern UI library
-- **TypeScript** - Type-safe development
-- **Vite** - Lightning-fast build tool
-- **TailwindCSS** - Utility-first CSS framework
-- **Recharts** - Beautiful charts and data visualization
-
-### Backend
-- **Cloudflare Workers** - Edge computing platform
-- **Hono** - Fast, lightweight web framework
-- **Supabase** - Database and authentication
-- **TypeScript** - End-to-end type safety
-
-## 🚀 Quick Start
-
 ## Prerequisites
 - Node.js 18 or newer
 - pnpm 8 or newer
@@ -48,6 +22,7 @@ A modern, full-stack weight tracking application built with React, TypeScript, a
 
 ## Install Dependencies
 ```bash
+
 pnpm install
 ```
 
@@ -93,6 +68,19 @@ After the secrets are set, deploy the backend:
 cd apps/backend
 pnpm wrangler deploy
 ```
+
+## Frontend Deployment (Cloudflare Pages)
+1. In the Cloudflare dashboard, open **Workers & Pages**.
+2. Click **Create application**.
+3. Choose **Pages** as the deployment target.
+4. Import your project from Git by selecting the forked repository.
+5. Configure the build settings:
+   - Build command: `pnpm install --frozen-lockfile && pnpm build`
+   - Build output directory: `dist`
+   - Root directory: `apps/frontend`
+6. Add an environment variable:
+   - `VITE_API_BASE_URL`: set this to your deployed worker URL followed by `/api`.
+7. Start the deployment and wait for Cloudflare Pages to finish building the frontend.
 
 ## Useful Scripts
 - `pnpm dev` – run backend and frontend locally
