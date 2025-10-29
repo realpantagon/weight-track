@@ -69,6 +69,7 @@ npx wrangler -v
 ## Local Project Setup
 1. Create `.env` files as needed (for example `apps/frontend/.env`) and configure local environment values.
 2. Make sure `VITE_API_BASE_URL` in the frontend points to your local or deployed backend.
+2. Make sure `VITE_APP_HEADER` in the frontend points to change your App Header name
 
 ## Backend Secrets and Deployment
 Add Cloudflare Worker secrets one command at a time from the project root:
