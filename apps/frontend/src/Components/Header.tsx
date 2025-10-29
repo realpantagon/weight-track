@@ -3,7 +3,7 @@ interface HeaderProps {
   latestEntryDate?: string;
   formatDate: (dateStr: string) => string;
 }
-const APP_HEADER = import.meta.env.APP_HEADER;
+const APP_HEADER = import.meta.env.VITE_APP_HEADER;
 
 export default function Header({ totalEntries, latestEntryDate, formatDate }: HeaderProps) {
   return (
