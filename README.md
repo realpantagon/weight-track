@@ -63,7 +63,6 @@ npx wrangler -v
    recorded_at timestamp default now(),
    exercised boolean default false
    );
-   alter table public."Yourname_Weight" enable row level security;
    ```
    Replace `<yourname>` with your own name or handle.
 

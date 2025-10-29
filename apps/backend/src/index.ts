@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import type { Context } from "hono";
 import { cors } from "hono/cors"
 import { createClient } from "@supabase/supabase-js";
 import type { NewWeightEntry, WeightEntry } from "./types";
@@ -13,11 +14,13 @@ const app = new Hono<{ Bindings: Bindings }>();
 
 app.use("/*", cors())
 
-function getSupabase(c: any) {
+type AppContext = Context<{ Bindings: Bindings }>;
+
+function getSupabase(c: AppContext) {
   return createClient(c.env.SUPABASE_URL, c.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 
-function getTableName(c: any) {
+function getTableName(c: AppContext) {
   return c.env.SUPABASE_TABLE;
 }
 
