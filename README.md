@@ -38,11 +38,19 @@ pnpm install
 ```
 
 ## Install Wrangler CLI
+Using pnpm (recommended if you already ran `pnpm install`):
 ```bash
 pnpm add -D wrangler@latest
+```
+Using npm:
+```bash
+npm install -D wrangler@latest
+```
+Verify Wrangler is available:
+```bash
 npx wrangler -v
 ```
-(verify the installed version prints correctly)
+(you should see the version number printed)
 
 ## Supabase Setup
 1. Sign in to Supabase and create a new project.
