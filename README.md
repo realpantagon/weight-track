@@ -21,17 +21,12 @@ A modern, full-stack weight tracking application built with React, TypeScript, a
    ```
 
 ## Install pnpm
-If you already have Node 18+, the easiest way is through Corepack (bundled with Node):
-```bash
-corepack enable
-corepack prepare pnpm@latest --activate
-```
-Alternatively, install globally with npm:
+install globally with npm:
 ```bash
 npm install -g pnpm
 ```
 
-## Install Dependencies
+## Install Dependencies (Options for custome Code)
 ```bash
 
 pnpm install
@@ -41,10 +36,6 @@ pnpm install
 Using pnpm (recommended if you already ran `pnpm install`):
 ```bash
 pnpm add -D wrangler@latest
-```
-Using npm:
-```bash
-npm install -D wrangler@latest
 ```
 Verify Wrangler is available:
 ```bash
@@ -63,6 +54,7 @@ npx wrangler -v
    recorded_at timestamp default now(),
    exercised boolean default false
    );
+   alter table public."Yourname_Weight" enable row level security;
    ```
    Replace `<yourname>` with your own name or handle.
 
@@ -97,16 +89,20 @@ pnpm wrangler deploy
 3. Choose **Pages** as the deployment target.
 4. Import your project from Git by selecting the forked repository.
 5. Configure the build settings:
+```
    - Build command: `pnpm install --frozen-lockfile && pnpm build`
    - Build output directory: `dist`
    - Root directory: `apps/frontend`
+```
 6. Add an environment variable:
    - `VITE_API_BASE_URL`: set this to your deployed worker URL followed by `/api`.
+   - `VITE_APP_HEADER`: set this to your deployed worker URL for set Header of App.
 7. Start the deployment and wait for Cloudflare Pages to finish building the frontend.
 
 ## Useful Scripts
 - `pnpm dev` – run backend and frontend locally
 - `pnpm build:frontend` – build the frontend for production
+- `pnpm wrangler deploy` – deploy the backend to cloudflare
 
 
 ## 📁 Project Structure
