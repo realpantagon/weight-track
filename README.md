@@ -12,6 +12,17 @@ A modern, full-stack weight tracking application built with React, TypeScript, a
 - pnpm 8 or newer
 - Supabase account
 
+## Install pnpm
+If you already have Node 18+, the easiest way is through Corepack (bundled with Node):
+```bash
+corepack enable
+corepack prepare pnpm@latest --activate
+```
+Alternatively, install globally with npm:
+```bash
+npm install -g pnpm
+```
+
 ## Fork and Clone
 1. Fork the repository on GitHub.
 2. Clone your fork to your local machine:
