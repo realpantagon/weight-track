@@ -8,6 +8,7 @@
     "dev:frontend": "vite",
     "dev:worker": "wrangler dev --config wrangler.toml",
     "build": "tsc -b && vite build",
+    "deploy": "pnpm build && wrangler deploy",
     "deploy:worker": "wrangler deploy",
     "deploy:frontend": "vite build && wrangler pages deploy dist",
     "preview": "vite preview",
