@@ -1,4 +1,4 @@
-name = "be-weight-track"
+name = "weight-track"
 main = "src-worker/index.ts"
 compatibility_date = "2025-09-18"
 
