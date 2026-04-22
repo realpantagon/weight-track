@@ -1,0 +1,82 @@
+import { Hono } from "hono";
+import type { Context } from "hono";
+import { cors } from "hono/cors";
+import { createClient } from "@supabase/supabase-js";
+import type { NewWeightEntry, WeightEntry } from "./types";
+
+type Bindings = {
+  SUPABASE_URL: string;
+  SUPABASE_SERVICE_ROLE_KEY: string;
+  SUPABASE_TABLE: string;
+};
+
+const app = new Hono<{ Bindings: Bindings }>();
+
+app.use("/*", cors());
+
+type AppContext = Context<{ Bindings: Bindings }>;
+
+function getSupabase(c: AppContext) {
+  return createClient(c.env.SUPABASE_URL, c.env.SUPABASE_SERVICE_ROLE_KEY);
+}
+
+function getTable(c: AppContext) {
+  return c.env.SUPABASE_TABLE;
+}
+
+app.get("/api/weight", async (c) => {
+  const { data, error } = await getSupabase(c)
+    .from(getTable(c))
+    .select("*")
+    .order("recorded_at", { ascending: true });
+  if (error) return c.json({ error: error.message }, 500);
+  return c.json<WeightEntry[]>(data);
+});
+
+app.get("/api/weight/min", async (c) => {
+  const { data, error } = await getSupabase(c)
+    .from(getTable(c))
+    .select("weight_kg")
+    .order("weight_kg", { ascending: true })
+    .limit(1);
+  if (error) return c.json({ error: error.message }, 500);
+  return c.json({ min: data?.[0]?.weight_kg ?? null });
+});
+
+app.get("/api/weight/max", async (c) => {
+  const { data, error } = await getSupabase(c)
+    .from(getTable(c))
+    .select("weight_kg")
+    .order("weight_kg", { ascending: false })
+    .limit(1);
+  if (error) return c.json({ error: error.message }, 500);
+  return c.json({ max: data?.[0]?.weight_kg ?? null });
+});
+
+app.get("/api/weight/avg", async (c) => {
+  const { data, error } = await getSupabase(c)
+    .from(getTable(c))
+    .select("weight_kg");
+  if (error) return c.json({ error: error.message }, 500);
+  if (!data || data.length === 0) return c.json({ average: null });
+  const avg = data.reduce((sum, row) => sum + Number(row.weight_kg), 0) / data.length;
+  return c.json({ average: Number(avg.toFixed(2)) });
+});
+
+app.post("/api/weight", async (c) => {
+  const body = await c.req.json<NewWeightEntry>();
+  const { data, error } = await getSupabase(c)
+    .from(getTable(c))
+    .insert({
+      weight_kg: body.weight_kg,
+      details: body.details,
+      recorded_at: body.recorded_at,
+      exercised: body.exercised,
+    })
+    .select()
+    .single();
+  if (error) return c.json({ error: error.message }, 500);
+  return c.json<WeightEntry>(data, 201);
+});
+
+export default app;

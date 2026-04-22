@@ -1,20 +1,36 @@
 {
-  "name": "pantagon-weight-tracking",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "weight-track",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
   "scripts": {
-    "dev:backend": "pnpm --filter ./apps/backend dev",
-    "dev:frontend": "pnpm --filter ./apps/frontend dev",
-    "dev": "concurrently \"pnpm dev:backend\" \"pnpm dev:frontend\"",
-    "build:backend": "pnpm --filter backend run deploy",
-    "build:frontend": "pnpm --filter ./apps/frontend build"
+    "dev": "concurrently \"pnpm dev:worker\" \"pnpm dev:frontend\"",
+    "dev:frontend": "vite",
+    "dev:worker": "wrangler dev --config wrangler.toml",
+    "build": "tsc -b && vite build",
+    "deploy:worker": "wrangler deploy",
+    "deploy:frontend": "vite build && wrangler pages deploy dist",
+    "preview": "vite preview",
+    "typecheck": "tsc -b"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.15.1",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.4",
+    "hono": "^4.9.7",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "recharts": "^3.2.1"
+  },
   "devDependencies": {
-    "concurrently": "^8.2.2"
-  }
+    "@cloudflare/workers-types": "^4.20250912.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react-swc": "^4.0.0",
+    "concurrently": "^9.1.2",
+    "tailwindcss": "^4.1.13",
+    "typescript": "~5.8.3",
+    "vite": "^7.1.2",
+    "wrangler": "^4.37.1"
+  },
+  "packageManager": "pnpm@10.15.1"
 }
