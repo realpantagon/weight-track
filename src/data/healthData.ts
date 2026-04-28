@@ -26,10 +26,10 @@ export const healthCheckSections: HealthCheckSection[] = [
     rows: [
       { item: "Age",            result: "22",     reference: "–",         status: "Normal", unit: "yrs"   },
       { item: "Height",         result: "170",    reference: "–",         status: "Normal", unit: "cm"    },
-      { item: "Weight",         result: "76",     reference: "–",         status: "Normal", unit: "kg"    },
-      { item: "BMI",            result: "26.30",  reference: "18.5–24.9", status: "Abnormal", unit: "kg/m²" },
+      { item: "Weight",         result: "72",     reference: "–",         status: "Normal", unit: "kg"    },
+      { item: "BMI",            result: "24.91",  reference: "18.5–24.9", status: "Abnormal", unit: "kg/m²" },
       { item: "Pulse",          result: "69",     reference: "60–100",    status: "Normal", unit: "bpm"   },
-      { item: "Blood Pressure", result: "122/73", reference: "<130/80",   status: "Normal", unit: "mmHg"  },
+      { item: "Blood Pressure", result: "122/73", reference: "<130/80",    status: "Normal", unit: "mmHg"  },
     ],
   },
   {
@@ -50,15 +50,15 @@ export const healthCheckSections: HealthCheckSection[] = [
     label: "CHEMISTRY",
     rows: [
       { item: "FBS",         result: "98",   reference: "74–106",    status: "Normal",   unit: "mg/dL" },
-      { item: "BUN",         result: "14",   reference: "9–20",      status: "Normal",   unit: "mg/dL" },
-      { item: "Creatinine",  result: "0.80", reference: "0.66–1.25", status: "Normal",   unit: "mg/dL" },
-      { item: "Uric Acid",   result: "9.1",  reference: "3.5–8.5",   status: "Abnormal", unit: "mg/dL" },
-      { item: "Cholesterol", result: "248",  reference: "<200",      status: "Abnormal", unit: "mg/dL" },
-      { item: "HDL",         result: "41",   reference: "40–60",     status: "Normal",   unit: "mg/dL" },
-      { item: "LDL",         result: "192",  reference: "<150",      status: "Abnormal", unit: "mg/dL" },
-      { item: "Triglyceride",result: "78",   reference: "<150",      status: "Normal",   unit: "mg/dL" },
-      { item: "AST",         result: "25",   reference: "17–59",     status: "Normal",   unit: "U/L"   },
-      { item: "ALT",         result: "28",   reference: "<50",       status: "Normal",   unit: "U/L"   },
+      { item: "BUN",         result: "19.7", reference: "9–20",      status: "Normal",   unit: "mg/dL" },
+      { item: "Creatinine",  result: "0.974",reference: "0.66–1.25", status: "Normal",   unit: "mg/dL" },
+      { item: "Uric Acid",   result: "8.70", reference: "3.5–8.5",   status: "Abnormal", unit: "mg/dL" },
+      { item: "Cholesterol", result: "229.9",reference: "<200",      status: "Abnormal", unit: "mg/dL" },
+      { item: "HDL",         result: "53.3", reference: "40–60",     status: "Normal",   unit: "mg/dL" },
+      { item: "LDL",         result: "184.3",reference: "<150",      status: "Abnormal", unit: "mg/dL" },
+      { item: "Triglyceride",result: "64.7", reference: "<150",      status: "Normal",   unit: "mg/dL" },
+      { item: "AST",         result: "16",   reference: "17–59",     status: "Normal",   unit: "U/L"   },
+      { item: "ALT",         result: "9.4",  reference: "<50",       status: "Normal",   unit: "U/L"   },
       { item: "Albumin",     result: "4.3",  reference: "3.9–5.2",   status: "Normal",   unit: "g/dL"  },
     ],
   },
@@ -89,7 +89,7 @@ export const healthCheckSections: HealthCheckSection[] = [
     id: "psa",
     label: "PSA",
     rows: [
-      { item: "PSA", result: "1.47", reference: "0–4", status: "Normal", unit: "ng/mL" },
+      { item: "PSA", result: "0.777", reference: "0–4", status: "Normal", unit: "ng/mL" },
     ],
   },
   {
@@ -341,5 +341,5 @@ export const HEALTH_SUMMARY = {
   watchCount: 1,     // ALP (ควรสังเกต)
   normalCount: 51,
   examDate: "28/04/2026",
-  subject: { sex: "MALE", age: 22, height: 170, weight: 71 },
+  subject: { sex: "MALE", age: 22, height: 170, weight: 72 },
 } as const;
