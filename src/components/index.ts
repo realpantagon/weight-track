@@ -4,3 +4,4 @@ export { default as WeightStatsComponent } from "./WeightStatsComponent";
 export { default as WeightEntriesList } from "./WeightEntriesList";
 export { default as AddWeightModal } from "./AddWeightModal";
 export { default as AddButton } from "./AddButton";
+export { default as HealthReport } from "./HealthReport";

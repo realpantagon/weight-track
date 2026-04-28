@@ -6,6 +6,7 @@ import {
   WeightChart,
   WeightEntriesList,
   WeightStatsComponent,
+  HealthReport,
 } from "./components";
 import {
   fetchWeights,
@@ -15,8 +16,10 @@ import {
   fetchAvgWeight,
 } from "./api";
 import type { WeightEntry, NewWeightEntry } from "./types";
+import type { AppPage } from "./data/healthData";
 
 function App() {
+  const [currentPage, setCurrentPage] = useState<AppPage>("weight");
   const [showModal, setShowModal] = useState(false);
   const [weights, setWeights] = useState<WeightEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -127,11 +130,20 @@ function App() {
                 weights.length > 0 ? weights[weights.length - 1].recorded_at : undefined
               }
               formatDate={formatDate}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
             />
-            <WeightChart weights={weights} />
-            <WeightStatsComponent stats={stats} />
-            <AddButton onClick={() => setShowModal(true)} />
-            <WeightEntriesList weights={weights} formatDate={formatDate} />
+
+            {currentPage === "weight" && (
+              <>
+                <WeightChart weights={weights} />
+                <WeightStatsComponent stats={stats} />
+                <AddButton onClick={() => setShowModal(true)} />
+                <WeightEntriesList weights={weights} formatDate={formatDate} />
+              </>
+            )}
+
+            {currentPage === "health" && <HealthReport />}
           </>
         )}
       </div>
