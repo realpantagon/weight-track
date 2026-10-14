@@ -16,8 +16,8 @@ A modern, full-stack weight tracking application built with React, TypeScript, a
 1. Fork the repository on GitHub.
 2. Clone your fork to your local machine:
    ```bash
-   git clone https://github.com/<your-username>/weight-track.git
-   cd weight-track
+   git clone https://github.com/<your-username>/pantagon-health.git
+   cd pantagon-health
    ```
 
 ## Install pnpm
@@ -108,7 +108,7 @@ pnpm wrangler deploy
 ## 📁 Project Structure
 
 ```
-pantagon-weight-tracking/
+pantagon-health/
 ├── apps/
 │   ├── frontend/          # React frontend application
 │   │   ├── src/
